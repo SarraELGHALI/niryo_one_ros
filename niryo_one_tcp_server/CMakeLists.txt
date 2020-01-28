@@ -5,7 +5,7 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   std_msgs
   niryo_one_msgs
-  niryo_one_python_api)
+)
 
 catkin_python_setup()
 
