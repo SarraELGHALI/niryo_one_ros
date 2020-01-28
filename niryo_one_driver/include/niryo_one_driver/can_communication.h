@@ -39,6 +39,8 @@
 
 #define CAN_BROADCAST_ID 5 // all motors have positive filter for their own id + this one
 
+#define CAN_MOTOR_6_ID 6 
+
 #define CAN_SCAN_OK 0
 #define CAN_SCAN_BUSY        -10001
 #define CAN_SCAN_NOT_ALLOWED -10002
@@ -83,6 +85,8 @@ class CanCommunication {
         bool isConnectionOk();
         bool isOnLimitedMode();
         
+
+
         void setTorqueOn(bool on);
 
         void setMicroSteps(std::vector<uint8_t> micro_steps_list);
@@ -106,7 +110,7 @@ class CanCommunication {
         void setCalibrationFlag(bool flag);
 
         void synchronizeSteppers(bool begin_traj);
-
+	int setStepper(uint8_t id, std::string name);
     private:
         
         // Niryo One hardware version
@@ -119,6 +123,7 @@ class CanCommunication {
         boost::shared_ptr<NiryoCanDriver> can;
 
         std::vector<int> required_steppers_ids;
+        std::vector<int> allowed_steppers_ids;
         
         // for hardware control
         bool is_can_connection_ok;
@@ -135,6 +140,11 @@ class CanCommunication {
         bool hw_control_loop_keep_alive;
         bool hw_is_busy;
         bool hw_limited_mode;
+	
+
+	// check if a stepper is connected  ( external stepper) 
+	bool is_stepper_connected; 
+
 
         void hardwareControlLoop();
         void hardwareControlRead();
@@ -148,6 +158,8 @@ class CanCommunication {
         StepperMotorState m2;
         StepperMotorState m3;
         StepperMotorState m4; // NOT used for Niryo One V2
+	StepperMotorState m6; // Conveyor belt 
+
         std::vector<StepperMotorState*> motors;
 
         // enable flags (no read flag)
