@@ -138,6 +138,13 @@ bool RosInterface::callbackPingAndSetDxlTool(niryo_one_msgs::PingDxlTool::Reques
     return true;
 }
 
+
+bool RosInterface::callbackPingAndSetStepper(niryo_one_msgs::PingDxlTool::Request &req, niryo_one_msgs::PingDxlTool::Response &res)
+{
+    res.state = comm->pingAndSetStepper(req.id, req.name);
+    return true;
+}
+
 bool RosInterface::callbackOpenGripper(niryo_one_msgs::OpenGripper::Request &req, niryo_one_msgs::OpenGripper::Response &res)
 {
     res.state = comm->openGripper(req.id, req.open_position, req.open_speed, req.open_hold_torque);
@@ -215,6 +222,10 @@ void RosInterface::startServiceServers()
     activate_leds_server = nh_.advertiseService("niryo_one/set_dxl_leds", &RosInterface::callbackActivateLeds, this);
 
     ping_and_set_dxl_tool_server = nh_.advertiseService("niryo_one/tools/ping_and_set_dxl_tool", &RosInterface::callbackPingAndSetDxlTool, this);
+
+    // steppers service test 
+    ping_and_set_stepper_server = nh_.advertiseService("niryo_one/tools/ping_and_set_stepper", &RosInterface::callbackPingAndSetStepper, this);
+
     open_gripper_server = nh_.advertiseService("niryo_one/tools/open_gripper", &RosInterface::callbackOpenGripper, this);
     close_gripper_server = nh_.advertiseService("niryo_one/tools/close_gripper", &RosInterface::callbackCloseGripper, this);
     pull_air_vacuum_pump_server = nh_.advertiseService("niryo_one/tools/pull_air_vacuum_pump", &RosInterface::callbackPullAirVacuumPump, this);

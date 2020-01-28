@@ -98,6 +98,9 @@ class RosInterface {
         ros::ServiceServer activate_leds_server;
 
         ros::ServiceServer ping_and_set_dxl_tool_server;
+	
+	ros::ServiceServer ping_and_set_stepper_server; 
+	
         ros::ServiceServer open_gripper_server;
         ros::ServiceServer close_gripper_server;
         ros::ServiceServer pull_air_vacuum_pump_server;
@@ -116,6 +119,8 @@ class RosInterface {
         bool callbackActivateLeds(niryo_one_msgs::SetLeds::Request &req, niryo_one_msgs::SetLeds::Response &res);
         
         bool callbackPingAndSetDxlTool(niryo_one_msgs::PingDxlTool::Request &req, niryo_one_msgs::PingDxlTool::Response &res);
+
+        bool callbackPingAndSetStepper(niryo_one_msgs::PingDxlTool::Request &req, niryo_one_msgs::PingDxlTool::Response &res);  // same msg as dxl but to change later ; this for test
 
         bool callbackOpenGripper(niryo_one_msgs::OpenGripper::Request &req, niryo_one_msgs::OpenGripper::Response &res);
         bool callbackCloseGripper(niryo_one_msgs::CloseGripper::Request &req, niryo_one_msgs::CloseGripper::Response &res);

@@ -67,6 +67,9 @@ class NiryoOneCommunication : public CommunicationBase {
         
         // tools
         int pingAndSetDxlTool(uint8_t id, std::string name);
+
+	// steppers niryo one conveyor belt test here 
+	int pingAndSetStepper(uint8_t id, std::string name);
         
         int openGripper(uint8_t id, uint16_t open_position, uint16_t open_speed, uint16_t open_hold_torque);
         int closeGripper(uint8_t id, uint16_t close_position, uint16_t close_speed, uint16_t close_hold_torque, uint16_t close_max_torque);

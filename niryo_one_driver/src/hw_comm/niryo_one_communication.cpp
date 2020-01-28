@@ -190,6 +190,23 @@ void NiryoOneCommunication::manageCanConnectionLoop()
     }
 }
 
+
+
+
+
+// stepper niryo one conveyor belt test is here 
+int NiryoOneCommunication::pingAndSetStepper(uint8_t id, std::string name)
+
+{ if (can_enabled) {
+        return canComm->setStepper(id, name);
+    }
+    return TOOL_STATE_PING_OK;
+}
+
+
+
+
+
 void NiryoOneCommunication::checkHardwareVersionFromDxlMotors()
 {
     // Check if hardware_version is compatible
@@ -552,6 +569,10 @@ int NiryoOneCommunication::pingAndSetDxlTool(uint8_t id, std::string name)
     }
     return TOOL_STATE_PING_OK;
 }
+
+
+
+
 
 int NiryoOneCommunication::openGripper(uint8_t id, uint16_t open_position, uint16_t open_speed, uint16_t open_hold_torque)
 {
