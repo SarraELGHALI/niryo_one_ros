@@ -61,7 +61,7 @@ class CommunicationBase {
         virtual int pingAndSetDxlTool(uint8_t id, std::string name) = 0;
         
 
-	virtual int pingAndSetStepper(uint8_t id, std::string name) = 0;
+	virtual int pingAndSetStepper(uint8_t id, bool activate) = 0;
 
 
 

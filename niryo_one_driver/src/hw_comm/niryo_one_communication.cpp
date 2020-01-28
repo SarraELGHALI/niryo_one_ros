@@ -195,12 +195,12 @@ void NiryoOneCommunication::manageCanConnectionLoop()
 
 
 // stepper niryo one conveyor belt test is here 
-int NiryoOneCommunication::pingAndSetStepper(uint8_t id, std::string name)
-
-{ if (can_enabled) {
-        return canComm->setStepper(id, name);
+int NiryoOneCommunication::pingAndSetStepper(uint8_t id, bool activate)
+{ 
+    if (can_enabled) {
+        return canComm->setStepper(id, activate);
     }
-    return TOOL_STATE_PING_OK;
+    return CONVEYOR_STATE_SET_OK;
 }
 
 

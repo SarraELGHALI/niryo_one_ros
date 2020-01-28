@@ -137,7 +137,7 @@ ROS_INFO("Home positions : (1 : %lf, 2 : %lf, 3 : %lf, 4 : %lf, 6 : %lf)", home_
             rad_pos_to_steps(offset_position_4, gear_ratio_4, direction_4),
 	    8, max_effort_4);
 
-   m6 = StepperMotorState("Stepper Conveyor belt", CAN_MOTOR_6_ID, gear_ratio_6, direction_6, 
+   m6 = StepperMotorState("Stepper Conveyor belt", CAN_MOTOR_CONVEYOR_1_ID, gear_ratio_6, direction_6, 
             rad_pos_to_steps(home_position_6, gear_ratio_6, direction_6),            // home position
             rad_pos_to_steps(offset_position_6, gear_ratio_6, direction_6),          // offset position
             8, max_effort_6);
@@ -1231,19 +1231,11 @@ int CanCommunication::scanAndCheck()
 }
 
 
-int CanCommunication::setStepper(uint8_t id, std::string name)
+int CanCommunication::setStepper(uint8_t id, bool activate)
 {
-    if(id == 1)
-    {
-       is_stepper_connected = true; 
-       m6.enable();
-       return(1);
-	} 
-    is_stepper_connected = false; 
-    m6.disable();
+    // accept whatever id for now // possiblity to connect only one conveyor 
+    is_stepper_connected = activate; 
     return(1);
-
-    
 }
 
 

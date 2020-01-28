@@ -20,6 +20,9 @@
 #ifndef NIRYO_STEPPER_MOTOR_STATE_H
 #define NIRYO_STEPPER_MOTOR_STATE_H
 
+
+
+
 class StepperMotorState {
 
     public:

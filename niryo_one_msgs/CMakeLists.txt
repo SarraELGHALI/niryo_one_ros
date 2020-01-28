@@ -57,6 +57,7 @@ add_service_files(
   SendCustomDxlValue.srv
   ChangeMotorConfig.srv
   SetString.srv
+  SetConveyor.srv
 )
 
 add_action_files(

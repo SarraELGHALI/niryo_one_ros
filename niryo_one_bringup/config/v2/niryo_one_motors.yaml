@@ -23,7 +23,9 @@ can_authorized_motors:
     - 1 # Axis 1 enabled if not commented
     - 2 # Axis 2 enabled if not commented
     - 3 # Axis 3 enabled if not commented
-    - 6 # id for conveyor belt
+    - 6 # id  for conveyor belt 1
+    - 6 # id for conveyor belt  2
+
      
 
 dxl_required_motors: # axis 4, 5 and 6 of Niryo One.

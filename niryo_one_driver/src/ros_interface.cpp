@@ -139,9 +139,8 @@ bool RosInterface::callbackPingAndSetDxlTool(niryo_one_msgs::PingDxlTool::Reques
 }
 
 
-bool RosInterface::callbackPingAndSetStepper(niryo_one_msgs::PingDxlTool::Request &req, niryo_one_msgs::PingDxlTool::Response &res)
-{
-    res.state = comm->pingAndSetStepper(req.id, req.name);
+bool RosInterface::callbackPingAndSetStepper(niryo_one_msgs::SetConveyor::Request &req, niryo_one_msgs::SetConveyor::Response &res) {
+    res.state = comm->pingAndSetStepper(req.id, req.activate);
     return true;
 }
 

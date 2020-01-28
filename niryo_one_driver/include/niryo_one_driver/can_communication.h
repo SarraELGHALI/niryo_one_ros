@@ -39,7 +39,8 @@
 
 #define CAN_BROADCAST_ID 5 // all motors have positive filter for their own id + this one
 
-#define CAN_MOTOR_6_ID 6 
+#define CAN_MOTOR_CONVEYOR_1_ID 6 
+#define CAN_MOTOR_CONVEYOR_2_ID 7
 
 #define CAN_SCAN_OK 0
 #define CAN_SCAN_BUSY        -10001
@@ -59,6 +60,9 @@
 
 #define CAN_STEPPERS_WRITE_OFFSET_FAIL -3
 
+
+#define CONVEYOR_STATE_SET_OK       0x11
+#define CONVEYOR_STATE__ERROR    0x012
 class CanCommunication {
 
     public:
@@ -110,7 +114,7 @@ class CanCommunication {
         void setCalibrationFlag(bool flag);
 
         void synchronizeSteppers(bool begin_traj);
-	int setStepper(uint8_t id, std::string name);
+	int setStepper(uint8_t id, bool activate);
     private:
         
         // Niryo One hardware version

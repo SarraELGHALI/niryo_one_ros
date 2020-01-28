@@ -41,6 +41,7 @@
 
 #include "niryo_one_msgs/ChangeHardwareVersion.h"
 #include "niryo_one_msgs/SendCustomDxlValue.h"
+#include "niryo_one_msgs/SetConveyor.h"
 
 #include "niryo_one_msgs/HardwareStatus.h"
 #include "niryo_one_msgs/SoftwareVersion.h"
@@ -120,7 +121,7 @@ class RosInterface {
         
         bool callbackPingAndSetDxlTool(niryo_one_msgs::PingDxlTool::Request &req, niryo_one_msgs::PingDxlTool::Response &res);
 
-        bool callbackPingAndSetStepper(niryo_one_msgs::PingDxlTool::Request &req, niryo_one_msgs::PingDxlTool::Response &res);  // same msg as dxl but to change later ; this for test
+        bool callbackPingAndSetStepper(niryo_one_msgs::SetConveyor::Request &req, niryo_one_msgs::SetConveyor::Response &res); 
 
         bool callbackOpenGripper(niryo_one_msgs::OpenGripper::Request &req, niryo_one_msgs::OpenGripper::Response &res);
         bool callbackCloseGripper(niryo_one_msgs::CloseGripper::Request &req, niryo_one_msgs::CloseGripper::Response &res);
