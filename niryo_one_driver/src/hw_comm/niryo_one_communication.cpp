@@ -200,7 +200,7 @@ int NiryoOneCommunication::pingAndSetStepper(uint8_t id, bool activate)
     if (can_enabled) {
         return canComm->setStepper(id, activate);
     }
-    return CONVEYOR_STATE_SET_OK;
+    return TOOL_STATE_PING_OK;
 }
 
 

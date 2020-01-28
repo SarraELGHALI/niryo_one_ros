@@ -285,10 +285,11 @@ void CanCommunication::hardwareControlRead()
         // 1. Validate motor id
         int motor_id = rxId & 0x0F; // 0x11 for id 1, 0x12 for id 2, ...
         if((motor_id == 6) &(is_stepper_connected))
-        { 
+        {  // conveyor belt detecetd 
             ROS_INFO("frame will be send somewhere else"); 
-	    int control_byte_1 = rxBuf[0];
-        
+	        int control_byte_1 = rxBuf[0];
+            // treat data 
+            // to do change position received to velocity  
             if (control_byte_1 == CAN_DATA_POSITION) {
             // check length 
               if (len != 4) {
@@ -305,6 +306,8 @@ void CanCommunication::hardwareControlRead()
  	    }
               return; 
           }
+
+          // treat niryo one steppers 
 	bool motor_found = false;
         for (int i = 0; i < motors.size(); i++) {
             if (motor_id == motors.at(i)->getId()) {
@@ -490,6 +493,11 @@ void CanCommunication::hardwareControlWrite()
             else {
                 ROS_ERROR("Failed to send Max Effort");
             }
+        }
+        // conveyor belt commands 
+        if(is_stepper_connected)
+        { 
+            relativeMoveMotor(&m6, rad_pos_to_steps(0.5, m6.getGearRatio(), m6.getDirection()), 1500, true);
         }
     }
 }

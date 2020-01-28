@@ -61,7 +61,7 @@
 #define CAN_STEPPERS_WRITE_OFFSET_FAIL -3
 
 
-#define CONVEYOR_STATE_SET_OK       0x11
+#define CONVEYOR_STATE_SET_OK    0x11
 #define CONVEYOR_STATE__ERROR    0x012
 class CanCommunication {
 
