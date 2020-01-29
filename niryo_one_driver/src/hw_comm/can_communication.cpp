@@ -304,8 +304,11 @@ void CanCommunication::hardwareControlRead()
           	  } 
 	     ROS_INFO("position stepper 6 is equal to %d ", pos);
  	    }
-              return; 
-          }
+         can->sendTorqueOnCommand(CAN_MOTOR_CONVEYOR_1_ID, torque_on); 
+         ROS_INFO("Success set motor conveyor to torque on");
+         
+         return; 
+        }
 
           // treat niryo one steppers 
 	bool motor_found = false;
@@ -421,10 +424,7 @@ void CanCommunication::hardwareControlWrite()
             else {
                 write_torque_on_enable = false; // disable writing on success
             }
-            if(is_stepper_connected)
-            { 
-                relativeMoveMotor(&m6, rad_pos_to_steps(0.5, m6.getGearRatio(), m6.getDirection()), 1500, true);
-            }
+            
         }
         
         // write synchronize position
