@@ -421,6 +421,10 @@ void CanCommunication::hardwareControlWrite()
             else {
                 write_torque_on_enable = false; // disable writing on success
             }
+            if(is_stepper_connected)
+            { 
+                relativeMoveMotor(&m6, rad_pos_to_steps(0.5, m6.getGearRatio(), m6.getDirection()), 1500, true);
+            }
         }
         
         // write synchronize position
@@ -445,10 +449,7 @@ void CanCommunication::hardwareControlWrite()
 
         // write position
         if (write_position_enable) {
-            if(is_stepper_connected)
-            { 
-                relativeMoveMotor(&m6, rad_pos_to_steps(0.5, m6.getGearRatio(), m6.getDirection()), 1500, true);
-            }
+            
             
             for (int i = 0 ; i < motors.size(); i++) {
                 if (motors.at(i)->isEnabled()) {
@@ -464,10 +465,6 @@ void CanCommunication::hardwareControlWrite()
         // write micro steps
         if (write_micro_steps_enable) {
             bool micro_steps_write_success = true;
-             if(is_stepper_connected)
-        { 
-            relativeMoveMotor(&m6, rad_pos_to_steps(0.5, m6.getGearRatio(), m6.getDirection()), 1500, true);
-        }
             for (int i = 0 ; i < motors.size(); i++) {
                 if (motors.at(i)->isEnabled()) {
                     if (can->sendMicroStepsCommand(motors.at(i)->getId(), motors.at(i)->getMicroStepsCommand()) != CAN_OK) {
