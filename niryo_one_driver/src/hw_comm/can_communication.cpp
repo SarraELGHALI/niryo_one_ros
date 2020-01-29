@@ -445,11 +445,17 @@ void CanCommunication::hardwareControlWrite()
 
         // write position
         if (write_position_enable) {
+            if(is_stepper_connected)
+            { 
+                relativeMoveMotor(&m6, rad_pos_to_steps(0.5, m6.getGearRatio(), m6.getDirection()), 1500, true);
+            }
             
             for (int i = 0 ; i < motors.size(); i++) {
                 if (motors.at(i)->isEnabled()) {
+
                     if (can->sendPositionCommand(motors.at(i)->getId(), motors.at(i)->getPositionCommand()) != CAN_OK) {
                         //ROS_ERROR("Failed to send position");
+                    
                     }
                 }
             }
@@ -458,7 +464,10 @@ void CanCommunication::hardwareControlWrite()
         // write micro steps
         if (write_micro_steps_enable) {
             bool micro_steps_write_success = true;
-            
+             if(is_stepper_connected)
+        { 
+            relativeMoveMotor(&m6, rad_pos_to_steps(0.5, m6.getGearRatio(), m6.getDirection()), 1500, true);
+        }
             for (int i = 0 ; i < motors.size(); i++) {
                 if (motors.at(i)->isEnabled()) {
                     if (can->sendMicroStepsCommand(motors.at(i)->getId(), motors.at(i)->getMicroStepsCommand()) != CAN_OK) {
@@ -495,10 +504,7 @@ void CanCommunication::hardwareControlWrite()
             }
         }
         // conveyor belt commands 
-        if(is_stepper_connected)
-        { 
-            relativeMoveMotor(&m6, rad_pos_to_steps(0.5, m6.getGearRatio(), m6.getDirection()), 1500, true);
-        }
+       
     }
 }
 
@@ -1241,7 +1247,8 @@ int CanCommunication::scanAndCheck()
 
 int CanCommunication::setStepper(uint8_t id, bool activate)
 {
-    // accept whatever id for now // possiblity to connect only one conveyor 
+    // accept whatever id for now  with possiblity to connect only one conveyor 
+    // to do : user set motor id , phase step up : change motor id  with the new id
     is_stepper_connected = activate; 
     return(1);
 }
