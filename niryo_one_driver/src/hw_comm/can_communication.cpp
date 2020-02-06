@@ -44,6 +44,7 @@ int CanCommunication::init(int hardware_version)
         return -1;
     }
     is_stepper_connected = true; 
+    is_conveyor_on = false; 
     ros::param::get("~spi_channel", spi_channel);
     ros::param::get("~spi_baudrate", spi_baudrate);
     ros::param::get("~gpio_can_interrupt", gpio_can_interrupt);
@@ -93,7 +94,7 @@ int CanCommunication::init(int hardware_version)
     ros::param::get("/niryo_one/motors/stepper_3_home_position", home_position_3);
     ros::param::get("/niryo_one/motors/stepper_4_home_position", home_position_4);
     ros::param::get("/niryo_one/motors/stepper_6_home_position", home_position_6);
-ROS_INFO("Home positions : (1 : %lf, 2 : %lf, 3 : %lf, 4 : %lf, 6 : %lf)", home_position_1, home_position_2, home_position_3, home_position_4, home_position_6);
+    ROS_INFO("Home positions : (1 : %lf, 2 : %lf, 3 : %lf, 4 : %lf, 6 : %lf)", home_position_1, home_position_2, home_position_3, home_position_4, home_position_6);
 
     double offset_position_1, offset_position_2, offset_position_3, offset_position_4, offset_position_6;
     ros::param::get("/niryo_one/motors/stepper_1_offset_position", offset_position_1);
@@ -285,28 +286,18 @@ void CanCommunication::hardwareControlRead()
         // 1. Validate motor id
         int motor_id = rxId & 0x0F; // 0x11 for id 1, 0x12 for id 2, ...
         if((motor_id == 6) &(is_stepper_connected))
-        {  // conveyor belt detecetd 
-            ROS_INFO("frame will be send somewhere else"); 
-	        int control_byte_1 = rxBuf[0];
-            // treat data 
-            // to do change position received to velocity  
-            if (control_byte_1 == CAN_DATA_POSITION) {
-            // check length 
-              if (len != 4) {
-                 ROS_ERROR("Position can frame should contain 4 data bytes");
-                 return;
-             }
-            
-              int32_t pos = (rxBuf[1] << 16) + (rxBuf[2] << 8) + rxBuf[3];
-	     
-              if (pos & (1 << 15)) {
-            	  pos = -1 * ((~pos + 1) & 0xFFFF);
-          	  } 
-	     ROS_INFO("position stepper 6 is equal to %d ", pos);
- 	    }
-         can->sendTorqueOnCommand(CAN_MOTOR_CONVEYOR_1_ID, torque_on); 
-         ROS_INFO("Success set motor conveyor to torque on");
+        { // conveyor belt detecetd	
+	 can->sendConveyoOnCommand(CAN_MOTOR_CONVEYOR_1_ID, is_conveyor_on); 
+         //can->sendTorqueOnCommand(CAN_MOTOR_CONVEYOR_1_ID, torque_off); 
+         //ROS_INFO("Success set motor conveyor to  on");
          
+	 int control_byte_1 = rxBuf[0];
+            // treat data  
+            if (control_byte_1 == CAN_DATA_CONVEYOR_STATE) {
+	    int conveyor_state = rxBuf[1]; 
+        
+	     //ROS_INFO("conveyor state is %d ", conveyor_state);
+ 	    }	
          return; 
         }
 
@@ -1184,9 +1175,9 @@ int CanCommunication::scanAndCheck()
             long unsigned int rxId;
             unsigned char len;
             unsigned char rxBuf[8];
-            ROS_INFO("id from motor rxId = %ld", rxId); 
+           
             can->readMsgBuf(&rxId, &len, rxBuf);
-            
+             ROS_INFO("id from motor rxId = %ld", rxId); 
             // Validate id
             int motor_id = rxId & 0x00F; // 0x101 for id 1, 0x102 for id 2, ...
             if (motor_id == m1.getId()) {
@@ -1247,6 +1238,13 @@ int CanCommunication::setStepper(uint8_t id, bool activate)
     // accept whatever id for now  with possiblity to connect only one conveyor 
     // to do : user set motor id , phase step up : change motor id  with the new id
     is_stepper_connected = activate; 
+    return(1);
+}
+int CanCommunication::conveyorOn(uint8_t id, bool activate)
+{
+    // accept whatever id for now  with possiblity to connect only one conveyor 
+    // to do : user set motor id , phase step up : change motor id  with the new id
+    is_conveyor_on = activate; 
     return(1);
 }
 

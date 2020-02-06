@@ -62,7 +62,7 @@ class CommunicationBase {
         
 
 	virtual int pingAndSetStepper(uint8_t id, bool activate) = 0;
-
+	virtual int moveConveyor(uint8_t id, bool activate) = 0; 
 
 
         virtual int openGripper(uint8_t id, uint16_t open_position, uint16_t open_speed, uint16_t open_hold_torque) = 0;

@@ -115,6 +115,7 @@ class CanCommunication {
 
         void synchronizeSteppers(bool begin_traj);
 	int setStepper(uint8_t id, bool activate);
+	int conveyorOn(uint8_t id, bool activate); 
     private:
         
         // Niryo One hardware version
@@ -148,6 +149,7 @@ class CanCommunication {
 
 	// check if a stepper is connected  ( external stepper) 
 	bool is_stepper_connected; 
+	bool is_conveyor_on; 
 
 
         void hardwareControlLoop();

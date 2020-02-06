@@ -35,6 +35,7 @@
 #define CAN_CMD_MOVE_REL     0x18
 #define CAN_CMD_RESET        0x19 // not yet implemented
 
+#define CAN_DATA_CONVEYOR_STATE 0x07
 #define CAN_DATA_POSITION    0x03
 #define CAN_DATA_DIAGNOSTICS 0x08
 #define CAN_DATA_CALIBRATION_RESULT 0x09
@@ -42,6 +43,8 @@
 
 #define STEPPER_CONTROL_MODE_RELAX    0
 #define STEPPER_CONTROL_MODE_STANDARD 1
+#define STEPPER_CONVEYOR_OFF 20
+#define STEPPER_CONVEYOR_ON 21
 #define STEPPER_CONTROL_MODE_PID_POS  2 
 #define STEPPER_CONTROL_MODE_TORQUE   3
 
@@ -67,6 +70,7 @@ class NiryoCanDriver
         INT8U sendPositionCommand(int id, int cmd);
         INT8U sendRelativeMoveCommand(int id, int steps, int delay);
         INT8U sendTorqueOnCommand(int id, int torque_on);
+        INT8U sendConveyoOnCommand(int id, bool conveyor_on); 
         INT8U sendPositionOffsetCommand(int id, int cmd, int absolute_steps_at_offset_position);
         INT8U sendCalibrationCommand(int i, int offset, int delay, int direction, int timeout);
         INT8U sendSynchronizePositionCommand(int id, bool begin_traj);

@@ -122,6 +122,7 @@ class RosInterface {
         bool callbackPingAndSetDxlTool(niryo_one_msgs::PingDxlTool::Request &req, niryo_one_msgs::PingDxlTool::Response &res);
 
         bool callbackPingAndSetStepper(niryo_one_msgs::SetConveyor::Request &req, niryo_one_msgs::SetConveyor::Response &res); 
+        bool callbackMoveConveyor(niryo_one_msgs::SetConveyor::Request &req, niryo_one_msgs::SetConveyor::Response &res); 
 
         bool callbackOpenGripper(niryo_one_msgs::OpenGripper::Request &req, niryo_one_msgs::OpenGripper::Response &res);
         bool callbackCloseGripper(niryo_one_msgs::CloseGripper::Request &req, niryo_one_msgs::CloseGripper::Response &res);
