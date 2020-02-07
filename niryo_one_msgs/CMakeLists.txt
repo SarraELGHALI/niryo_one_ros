@@ -58,6 +58,7 @@ add_service_files(
   ChangeMotorConfig.srv
   SetString.srv
   SetConveyor.srv
+  ControlConveyor.srv
 )
 
 add_action_files(

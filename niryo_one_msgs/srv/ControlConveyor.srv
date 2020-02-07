@@ -1,0 +1,6 @@
+uint8 id
+
+bool control_on
+int16 speed
+---
+uint8 state
