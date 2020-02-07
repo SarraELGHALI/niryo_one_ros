@@ -144,7 +144,7 @@ bool RosInterface::callbackPingAndSetStepper(niryo_one_msgs::SetConveyor::Reques
     return true;
 }
 bool RosInterface::callbackControlConveyor(niryo_one_msgs::ControlConveyor::Request &req, niryo_one_msgs::ControlConveyor::Response &res){
-    res.state = comm->moveConveyor(req.id, req.control_on); 
+    res.state = comm->moveConveyor(req.id, req.control_on, req.speed); 
     return true;
 }
 
