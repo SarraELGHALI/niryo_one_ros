@@ -177,7 +177,7 @@ int FakeCommunication::pingAndSetStepper(uint8_t id, bool activate)
     ROS_INFO("activate stepper with id : %03d", id);
     return TOOL_STATE_PING_OK;
 }
-int FakeCommunication::moveConveyor(uint8_t id, bool activate, int16_t speed){
+int FakeCommunication::moveConveyor(uint8_t id, bool activate, int16_t speed, int8_t direction){
 	ROS_INFO("move stepper with id : %03d", id);
     return TOOL_STATE_PING_OK;
 }        

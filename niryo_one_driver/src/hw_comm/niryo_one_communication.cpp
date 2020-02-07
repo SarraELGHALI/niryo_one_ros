@@ -204,10 +204,10 @@ int NiryoOneCommunication::pingAndSetStepper(uint8_t id, bool activate)
 }
 
 // stepper niryo one conveyor belt test is here 
-int NiryoOneCommunication::moveConveyor(uint8_t id, bool activate, int16_t speed)
+int NiryoOneCommunication::moveConveyor(uint8_t id, bool activate, int16_t speed, int8_t direction)
 { 
     if (can_enabled) {
-        return canComm->conveyorOn(id, activate, speed);
+        return canComm->conveyorOn(id, activate, speed, direction);
     }
     return TOOL_STATE_PING_OK;
 }

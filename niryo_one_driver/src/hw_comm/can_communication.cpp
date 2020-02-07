@@ -45,7 +45,8 @@ int CanCommunication::init(int hardware_version)
     }
     is_stepper_connected = true; 
     is_conveyor_on = false; 
-    conveyor_speed = 100; 
+    conveyor_speed = 60;
+    conveyor_direction = 1;  
     ros::param::get("~spi_channel", spi_channel);
     ros::param::get("~spi_baudrate", spi_baudrate);
     ros::param::get("~gpio_can_interrupt", gpio_can_interrupt);
@@ -288,7 +289,7 @@ void CanCommunication::hardwareControlRead()
         int motor_id = rxId & 0x0F; // 0x11 for id 1, 0x12 for id 2, ...
         if((motor_id == 6) &(is_stepper_connected))
         { // conveyor belt detecetd	
-	 can->sendConveyoOnCommand(CAN_MOTOR_CONVEYOR_1_ID, is_conveyor_on, conveyor_speed); 
+	 can->sendConveyoOnCommand(CAN_MOTOR_CONVEYOR_1_ID, is_conveyor_on, conveyor_speed, conveyor_direction); 
          //can->sendTorqueOnCommand(CAN_MOTOR_CONVEYOR_1_ID, torque_off); 
          //ROS_INFO("Success set motor conveyor to  on");
          
@@ -1241,7 +1242,7 @@ int CanCommunication::setStepper(uint8_t id, bool activate)
     is_stepper_connected = activate; 
     return(1);
 }
-int CanCommunication::conveyorOn(uint8_t id, bool control_on, int16_t speed)
+int CanCommunication::conveyorOn(uint8_t id, bool control_on, int16_t speed, int8_t direction)
 {
     // accept whatever id for now  with possiblity to connect only one conveyor 
     // to do : user set motor id , phase step up : change motor id  with the new id
