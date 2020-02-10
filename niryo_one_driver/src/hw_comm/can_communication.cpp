@@ -93,7 +93,7 @@ int CanCommunication::init(int hardware_version)
     ros::param::get("/niryo_one/motors/stepper_6_gear_ratio", gear_ratio_6);
     ros::param::get("/niryo_one/motors/stepper_7_gear_ratio", gear_ratio_7);
 
-    ROS_INFO("Gear ratios : (1 : %lf, 2 : %lf, 3 : %lf, 4 : %lf, 6 : %lf, 7 : %lf)", gear_ratio_1, gear_ratio_2, gear_ratio_3, gear_ratio_4, gear_ratio_6), gear_ratio_7;
+    ROS_INFO("Gear ratios : (1 : %lf, 2 : %lf, 3 : %lf, 4 : %lf, 6 : %lf, 7 : %lf)", gear_ratio_1, gear_ratio_2, gear_ratio_3, gear_ratio_4, gear_ratio_6, gear_ratio_7);
 
     double home_position_1, home_position_2, home_position_3, home_position_4, home_position_6, home_position_7;
     ros::param::get("/niryo_one/motors/stepper_1_home_position", home_position_1);
