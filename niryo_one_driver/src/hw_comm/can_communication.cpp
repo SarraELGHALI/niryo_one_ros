@@ -43,10 +43,14 @@ int CanCommunication::init(int hardware_version)
         ROS_ERROR("%s", debug_error_message.c_str());
         return -1;
     }
-    is_stepper_connected = true; 
-    is_conveyor_on = false; 
-    conveyor_speed = 60;
-    conveyor_direction = 1;  
+    is_conveyor_id_1_connected = true; 
+    is_conveyor_id_2_connected = true; 
+    is_conveyor_id_1_on = false; 
+    is_conveyor_id_2_on = false; 
+    conveyor_id_1_speed = 60;
+    conveyor_id_2_speed = 60;
+    conveyor_id_1_direction = 1;  
+    conveyor_id_2_direction = 1; 
     ros::param::get("~spi_channel", spi_channel);
     ros::param::get("~spi_baudrate", spi_baudrate);
     ros::param::get("~gpio_can_interrupt", gpio_can_interrupt);
@@ -81,44 +85,49 @@ int CanCommunication::init(int hardware_version)
     
     
     
-    double gear_ratio_1, gear_ratio_2, gear_ratio_3, gear_ratio_4, gear_ratio_6;
+    double gear_ratio_1, gear_ratio_2, gear_ratio_3, gear_ratio_4, gear_ratio_6, gear_ratio_7;
     ros::param::get("/niryo_one/motors/stepper_1_gear_ratio", gear_ratio_1);
     ros::param::get("/niryo_one/motors/stepper_2_gear_ratio", gear_ratio_2);
     ros::param::get("/niryo_one/motors/stepper_3_gear_ratio", gear_ratio_3);
     ros::param::get("/niryo_one/motors/stepper_4_gear_ratio", gear_ratio_4);
     ros::param::get("/niryo_one/motors/stepper_6_gear_ratio", gear_ratio_6);
+    ros::param::get("/niryo_one/motors/stepper_7_gear_ratio", gear_ratio_7);
 
-    ROS_INFO("Gear ratios : (1 : %lf, 2 : %lf, 3 : %lf, 4 : %lf, 6 : %lf)", gear_ratio_1, gear_ratio_2, gear_ratio_3, gear_ratio_4, gear_ratio_6);
+    ROS_INFO("Gear ratios : (1 : %lf, 2 : %lf, 3 : %lf, 4 : %lf, 6 : %lf, 7 : %lf)", gear_ratio_1, gear_ratio_2, gear_ratio_3, gear_ratio_4, gear_ratio_6), gear_ratio_7;
 
-    double home_position_1, home_position_2, home_position_3, home_position_4, home_position_6;
+    double home_position_1, home_position_2, home_position_3, home_position_4, home_position_6, home_position_7;
     ros::param::get("/niryo_one/motors/stepper_1_home_position", home_position_1);
     ros::param::get("/niryo_one/motors/stepper_2_home_position", home_position_2);
     ros::param::get("/niryo_one/motors/stepper_3_home_position", home_position_3);
     ros::param::get("/niryo_one/motors/stepper_4_home_position", home_position_4);
     ros::param::get("/niryo_one/motors/stepper_6_home_position", home_position_6);
-    ROS_INFO("Home positions : (1 : %lf, 2 : %lf, 3 : %lf, 4 : %lf, 6 : %lf)", home_position_1, home_position_2, home_position_3, home_position_4, home_position_6);
+    ros::param::get("/niryo_one/motors/stepper_6_home_position", home_position_7);
+    ROS_INFO("Home positions : (1 : %lf, 2 : %lf, 3 : %lf, 4 : %lf, 6 : %lf, 7 : %lf)", home_position_1, home_position_2, home_position_3, home_position_4, home_position_6, home_position_7);
 
-    double offset_position_1, offset_position_2, offset_position_3, offset_position_4, offset_position_6;
+    double offset_position_1, offset_position_2, offset_position_3, offset_position_4, offset_position_6, offset_position_7;
     ros::param::get("/niryo_one/motors/stepper_1_offset_position", offset_position_1);
     ros::param::get("/niryo_one/motors/stepper_2_offset_position", offset_position_2);
     ros::param::get("/niryo_one/motors/stepper_3_offset_position", offset_position_3);
     ros::param::get("/niryo_one/motors/stepper_4_offset_position", offset_position_4);
     ros::param::get("/niryo_one/motors/stepper_6_offset_position", offset_position_6);
-    ROS_INFO("Angle offsets : (1 : %lf, 2 : %lf, 3 : %lf, 4 : %lf, 6 : %lf)", offset_position_1, offset_position_2, offset_position_3, offset_position_4, offset_position_6);
+    ros::param::get("/niryo_one/motors/stepper_6_offset_position", offset_position_7);
+    ROS_INFO("Angle offsets : (1 : %lf, 2 : %lf, 3 : %lf, 4 : %lf, 6 : %lf, 7 : %lf)", offset_position_1, offset_position_2, offset_position_3, offset_position_4, offset_position_6, offset_position_7);
 
-    double direction_1, direction_2, direction_3, direction_4, direction_6;
+    double direction_1, direction_2, direction_3, direction_4, direction_6, direction_7;
     ros::param::get("/niryo_one/motors/stepper_1_direction", direction_1);
     ros::param::get("/niryo_one/motors/stepper_2_direction", direction_2); 
     ros::param::get("/niryo_one/motors/stepper_3_direction", direction_3);
     ros::param::get("/niryo_one/motors/stepper_4_direction", direction_4);
     
     ros::param::get("/niryo_one/motors/stepper_6_direction", direction_6);
-    int max_effort_1, max_effort_2, max_effort_3, max_effort_4, max_effort_6;
+    ros::param::get("/niryo_one/motors/stepper_6_direction", direction_7);
+    int max_effort_1, max_effort_2, max_effort_3, max_effort_4, max_effort_6, max_effort_7;
     ros::param::get("/niryo_one/motors/stepper_1_max_effort", max_effort_1);
     ros::param::get("/niryo_one/motors/stepper_2_max_effort", max_effort_2);
     ros::param::get("/niryo_one/motors/stepper_3_max_effort", max_effort_3);
     ros::param::get("/niryo_one/motors/stepper_4_max_effort", max_effort_4);
     ros::param::get("/niryo_one/motors/stepper_6_max_effort", max_effort_6);
+    ros::param::get("/niryo_one/motors/stepper_6_max_effort", max_effort_7);
     // Create motors with previous params
     m1 = StepperMotorState("Stepper Axis 1", CAN_MOTOR_1_ID, gear_ratio_1, direction_1, 
             rad_pos_to_steps(home_position_1, gear_ratio_1, direction_1),            // home position
@@ -139,11 +148,15 @@ int CanCommunication::init(int hardware_version)
             rad_pos_to_steps(home_position_4, gear_ratio_4, direction_4),
             rad_pos_to_steps(offset_position_4, gear_ratio_4, direction_4),
 	    8, max_effort_4);
-  
-   m6 = StepperMotorState("Stepper Conveyor belt", CAN_MOTOR_CONVEYOR_1_ID, gear_ratio_6, direction_6, 
+  // COnveyor belts steppers 
+   m6 = StepperMotorState("Stepper Conveyor belt 1 ", CAN_MOTOR_CONVEYOR_1_ID, gear_ratio_6, direction_6, 
             rad_pos_to_steps(home_position_6, gear_ratio_6, direction_6),            // home position
             rad_pos_to_steps(offset_position_6, gear_ratio_6, direction_6),          // offset position
             8, max_effort_6);
+    m7 = StepperMotorState("Stepper Conveyor belt 2", CAN_MOTOR_CONVEYOR_2_ID, gear_ratio_7, direction_7, 
+            rad_pos_to_steps(home_position_7, gear_ratio_7, direction_7),            // home position
+            rad_pos_to_steps(offset_position_7, gear_ratio_7, direction_7),          // offset position
+            8, max_effort_7);
 
     for (uint8_t i = 0 ; i < required_steppers_ids.size() ; ++i) {
         if      (required_steppers_ids.at(i) == m1.getId()) { m1.enable(); }
@@ -167,9 +180,14 @@ int CanCommunication::init(int hardware_version)
 
     ROS_INFO("%d motors should be connected to CAN bus", (int) required_steppers_ids.size());
     
-    if (is_stepper_connected)
+    // enable conveyor belts motors 
+    if (is_conveyor_id_1_connected)
 	{
 		m6.enable();	
+	}
+     if (is_conveyor_id_2_connected)
+	{
+		m7.enable();	
 	}
     // fill motors array (to avoid redundant code later)
     motors.push_back(&m1);
@@ -260,6 +278,7 @@ void CanCommunication::stopHardwareControlLoop()
         motors.at(i)->resetState();
     }
     m6.resetState(); 
+    m7.resetState();
     hw_control_loop_keep_alive = false;
 }
 
@@ -285,22 +304,29 @@ void CanCommunication::hardwareControlRead()
 
         // 1. Validate motor id
         int motor_id = rxId & 0x0F; // 0x11 for id 1, 0x12 for id 2, ...
-        if((motor_id == 6) &(is_stepper_connected))
-        { // conveyor belt detecetd	
-	 can->sendConveyoOnCommand(CAN_MOTOR_CONVEYOR_1_ID, is_conveyor_on, conveyor_speed, conveyor_direction); 
-         //can->sendTorqueOnCommand(CAN_MOTOR_CONVEYOR_1_ID, torque_off); 
-         //ROS_INFO("Success set motor conveyor to  on");
-         
-	 int control_byte_1 = rxBuf[0];
+        // conveyor belt detecetd
+        if((motor_id == CAN_MOTOR_CONVEYOR_1_ID) &(is_conveyor_id_1_connected))
+        { 
+            can->sendConveyoOnCommand(CAN_MOTOR_CONVEYOR_1_ID, is_conveyor_id_1_on, conveyor_id_1_speed, conveyor_id_1_direction); 
+            int control_byte_1 = rxBuf[0];
             // treat data  
             if (control_byte_1 == CAN_DATA_CONVEYOR_STATE) {
-	    int conveyor_state = rxBuf[1]; 
-        
-	     //ROS_INFO("conveyor state is %d ", conveyor_state);
- 	    }	
+                int conveyor_state = rxBuf[1];
+                // to do : send this value on a topic to track conveyor state 
+            }	
          return; 
         }
-
+        if((motor_id == CAN_MOTOR_CONVEYOR_2_ID) &(is_conveyor_id_2_connected))
+        { 
+            can->sendConveyoOnCommand(CAN_MOTOR_CONVEYOR_2_ID, is_conveyor_id_2_on, conveyor_id_2_speed, conveyor_id_2_direction); 
+            int control_byte_1 = rxBuf[0];
+            // treat data  
+            if (control_byte_1 == CAN_DATA_CONVEYOR_STATE) {
+                int conveyor_state = rxBuf[1];
+                // to do : send this value on a topic to track conveyor state 
+            }	
+         return; 
+        }
           // treat niryo one steppers 
 	bool motor_found = false;
         for (int i = 0; i < motors.size(); i++) {
@@ -1163,12 +1189,13 @@ int CanCommunication::scanAndCheck()
     bool m3_ok = !m3.isEnabled();
     bool m4_ok = !m4.isEnabled();
    
-    bool m6_ok = !m6.isEnabled();   
+    bool m6_ok = !m6.isEnabled();
+    bool m7_ok = !m7.isEnabled();   
     double time_begin_scan = ros::Time::now().toSec();
     double min_time_to_wait = 0.25;
     double timeout = 0.5;
 
-    while (!m1_ok || !m2_ok || !m3_ok || !m4_ok || !m6_ok || (ros::Time::now().toSec() - time_begin_scan < min_time_to_wait)) {
+    while (!m1_ok || !m2_ok || !m3_ok || !m4_ok || !m6_ok || !m7_ok || (ros::Time::now().toSec() - time_begin_scan < min_time_to_wait)) {
         ros::Duration(0.001).sleep(); // check at 1000 Hz
         
         if (can->canReadData()) {
@@ -1189,14 +1216,23 @@ int CanCommunication::scanAndCheck()
             else if (motor_id == m3.getId()) {
                 m3_ok = true;
             }
-           else if (is_stepper_connected){
-		if(motor_id = m6.getId()){
+           
+           else if (is_conveyor_id_1_connected){
+               if(motor_id = m6.getId()){
                 m6_ok = true;
-		}
-	  }
-	  else if (!is_stepper_connected){
-		m6_ok = true; // hardcode this part for this moment ( thiiiink ) 	
-	   }
+                }
+                }
+            else if (!is_conveyor_id_1_connected){
+                m6_ok = true; // hardcode this part for this moment ( thiiiink ) 	
+                }
+            else if (is_conveyor_id_2_connected){
+		        if(motor_id = m7.getId()){
+                    m7_ok = true;
+		        }
+	        }
+	        else if (!is_conveyor_id_2_connected){
+		        m7_ok = true; // hardcode this part for this moment ( thiiiink ) 	
+	            }
             else if (hardware_version == 1 && motor_id == m4.getId()) { // m4 only for Niryo One V1
                 m4_ok = true;
             }
@@ -1237,16 +1273,32 @@ int CanCommunication::setStepper(uint8_t id, bool activate)
 {
     // accept whatever id for now  with possiblity to connect only one conveyor 
     // to do : user set motor id , phase step up : change motor id  with the new id
-    is_stepper_connected = activate; 
+    if (id == CAN_MOTOR_CONVEYOR_1_ID) 
+    { 
+        is_conveyor_id_1_connected = activate; 
+    }
+    else if (id == CAN_MOTOR_CONVEYOR_2_ID)
+    {
+         is_conveyor_id_2_connected = activate; 
+    }
     return(1);
 }
 int CanCommunication::conveyorOn(uint8_t id, bool control_on, int16_t speed, int8_t direction)
 {
     // accept whatever id for now  with possiblity to connect only one conveyor 
     // to do : user set motor id , phase step up : change motor id  with the new id
-    is_conveyor_on = control_on; 
-    conveyor_speed =speed; 
-    conveyor_direction = direction;
+      if (id == CAN_MOTOR_CONVEYOR_1_ID) 
+    {
+        is_conveyor_id_1_on = control_on; 
+        conveyor_id_1_speed =speed; 
+        conveyor_id_1_direction = direction;
+    }
+    else if (id == CAN_MOTOR_CONVEYOR_2_ID) 
+    {
+        is_conveyor_id_2_on = control_on; 
+        conveyor_id_2_speed =speed; 
+        conveyor_id_2_direction = direction;
+    }
     return(1);
 }
 

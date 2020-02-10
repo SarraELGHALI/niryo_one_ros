@@ -148,10 +148,14 @@ class CanCommunication {
 	
 
 	// check if a stepper is connected  ( external stepper) 
-	bool is_stepper_connected; 
-	bool is_conveyor_on; 
-        int  conveyor_speed; 
-        int8_t conveyor_direction;
+	bool is_conveyor_id_1_connected; 
+        bool is_conveyor_id_2_connected; 
+        bool is_conveyor_id_1_on; 
+	bool is_conveyor_id_2_on; 
+        int  conveyor_id_1_speed; 
+        int  conveyor_id_2_speed; 
+        int8_t conveyor_id_1_direction;
+        int8_t conveyor_id_2_direction;
 
 
         void hardwareControlLoop();
@@ -166,7 +170,9 @@ class CanCommunication {
         StepperMotorState m2;
         StepperMotorState m3;
         StepperMotorState m4; // NOT used for Niryo One V2
-	StepperMotorState m6; // Conveyor belt 
+	StepperMotorState m6; // Conveyor belt  1
+        StepperMotorState m7; // Conveyor belt  2
+
 
         std::vector<StepperMotorState*> motors;
 

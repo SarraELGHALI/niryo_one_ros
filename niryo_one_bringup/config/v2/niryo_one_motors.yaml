@@ -24,7 +24,7 @@ can_authorized_motors:
     - 2 # Axis 2 enabled if not commented
     - 3 # Axis 3 enabled if not commented
     - 6 # id  for conveyor belt 1
-    - 6 # id for conveyor belt  2
+    - 7 # id for conveyor belt  2
 
      
 
