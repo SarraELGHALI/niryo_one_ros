@@ -139,7 +139,7 @@ int CanCommunication::init(int hardware_version)
             rad_pos_to_steps(home_position_4, gear_ratio_4, direction_4),
             rad_pos_to_steps(offset_position_4, gear_ratio_4, direction_4),
 	    8, max_effort_4);
-
+  
    m6 = StepperMotorState("Stepper Conveyor belt", CAN_MOTOR_CONVEYOR_1_ID, gear_ratio_6, direction_6, 
             rad_pos_to_steps(home_position_6, gear_ratio_6, direction_6),            // home position
             rad_pos_to_steps(offset_position_6, gear_ratio_6, direction_6),          // offset position
@@ -149,7 +149,6 @@ int CanCommunication::init(int hardware_version)
         if      (required_steppers_ids.at(i) == m1.getId()) { m1.enable(); }
         else if (required_steppers_ids.at(i) == m2.getId()) { m2.enable(); }
         else if (required_steppers_ids.at(i) == m3.getId()) { m3.enable(); }
-       //else if (allowed_steppers_ids.at(6) == m6.getId()) { m6.enable(); }
 
         else if (hardware_version == 1 && required_steppers_ids.at(i) == m4.getId()) { m4.enable(); }
         else {
@@ -176,7 +175,6 @@ int CanCommunication::init(int hardware_version)
     motors.push_back(&m1);
     motors.push_back(&m2);
     motors.push_back(&m3);
-    //motors.push_back(&m6);
     if (hardware_version == 1) {
         motors.push_back(&m4);
     }
@@ -1248,6 +1246,7 @@ int CanCommunication::conveyorOn(uint8_t id, bool control_on, int16_t speed, int
     // to do : user set motor id , phase step up : change motor id  with the new id
     is_conveyor_on = control_on; 
     conveyor_speed =speed; 
+    conveyor_direction = direction;
     return(1);
 }
 
