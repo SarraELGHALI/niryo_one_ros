@@ -309,7 +309,8 @@ void CanCommunication::hardwareControlRead()
         if((motor_id == CAN_MOTOR_CONVEYOR_1_ID) &(is_conveyor_id_1_connected))
         {  
             if((update_id)&(old_id == motor_id)){
-                can->sendUpdateConveyorId(CAN_MOTOR_CONVEYOR_1_ID, new_id); 
+                can->sendUpdateConveyorId(CAN_MOTOR_CONVEYOR_1_ID, new_id);
+		update_id = false; 
                 return; 
             }
             can->sendConveyoOnCommand(CAN_MOTOR_CONVEYOR_1_ID, is_conveyor_id_1_on, conveyor_id_1_speed, conveyor_id_1_direction); 
@@ -325,6 +326,7 @@ void CanCommunication::hardwareControlRead()
         { 
             if((update_id)&(old_id == motor_id)){
                 can->sendUpdateConveyorId(old_id, new_id); 
+		update_id = false; 
                 return; 
             }
             can->sendConveyoOnCommand(CAN_MOTOR_CONVEYOR_2_ID, is_conveyor_id_2_on, conveyor_id_2_speed, conveyor_id_2_direction); 
@@ -1315,7 +1317,8 @@ int  CanCommunication::updateConveyorId(uint8_t id, uint8_t new_id, bool update)
 {   
     update_id = update; 
     new_id = new_id; 
-    old_id = id; 
+    old_id = id;
+	ROS_ERROR("new id : %d", new_id);
     return(1); 
 }
 

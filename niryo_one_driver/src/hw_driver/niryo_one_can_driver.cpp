@@ -109,12 +109,12 @@ INT8U NiryoCanDriver::sendConveyoOnCommand(int id, bool conveyor_on, int conveyo
 
     return mcp_can->sendMsgBuf(id, 0, 4, data);
 }
-INT8U NiryoCanDriver::sendUpdateConveyorId(int old_id, int new_id)
+INT8U NiryoCanDriver::sendUpdateConveyorId(uint8_t old_id, uint8_t new_id)
 {
     uint8_t data[3] = {0};
     data[0] = CAN_CMD_MODE;
     data[1] = CAN_UPDATE_CONVEYOR_ID;
-    data[2] = new_id;  
+    data[2] = 6;  
     return mcp_can->sendMsgBuf(old_id, 0, 3, data);
 }
 

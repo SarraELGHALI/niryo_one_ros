@@ -78,7 +78,7 @@ class NiryoCanDriver
         INT8U sendMaxEffortCommand(int id, int effort);
         // Conveyor functions 
         INT8U sendConveyoOnCommand(int id, bool conveyor_on, int conveyor_speed, int8_t direction) ; 
-        INT8U sendUpdateConveyorId(int old_id, int new_id);
+        INT8U sendUpdateConveyorId(uint8_t old_id, uint8_t new_id);
       
 };
 
