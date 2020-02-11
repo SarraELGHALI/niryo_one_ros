@@ -43,8 +43,8 @@ int CanCommunication::init(int hardware_version)
         ROS_ERROR("%s", debug_error_message.c_str());
         return -1;
     }
-    is_conveyor_id_1_connected = true; 
-    is_conveyor_id_2_connected = true; 
+    is_conveyor_id_1_connected = false; 
+    is_conveyor_id_2_connected = false; 
     is_conveyor_id_1_on = false; 
     is_conveyor_id_2_on = false; 
     conveyor_id_1_speed = 60;
@@ -101,7 +101,7 @@ int CanCommunication::init(int hardware_version)
     ros::param::get("/niryo_one/motors/stepper_3_home_position", home_position_3);
     ros::param::get("/niryo_one/motors/stepper_4_home_position", home_position_4);
     ros::param::get("/niryo_one/motors/stepper_6_home_position", home_position_6);
-    ros::param::get("/niryo_one/motors/stepper_6_home_position", home_position_7);
+    ros::param::get("/niryo_one/motors/stepper_7_home_position", home_position_7);
     ROS_INFO("Home positions : (1 : %lf, 2 : %lf, 3 : %lf, 4 : %lf, 6 : %lf, 7 : %lf)", home_position_1, home_position_2, home_position_3, home_position_4, home_position_6, home_position_7);
 
     double offset_position_1, offset_position_2, offset_position_3, offset_position_4, offset_position_6, offset_position_7;
@@ -110,7 +110,7 @@ int CanCommunication::init(int hardware_version)
     ros::param::get("/niryo_one/motors/stepper_3_offset_position", offset_position_3);
     ros::param::get("/niryo_one/motors/stepper_4_offset_position", offset_position_4);
     ros::param::get("/niryo_one/motors/stepper_6_offset_position", offset_position_6);
-    ros::param::get("/niryo_one/motors/stepper_6_offset_position", offset_position_7);
+    ros::param::get("/niryo_one/motors/stepper_7_offset_position", offset_position_7);
     ROS_INFO("Angle offsets : (1 : %lf, 2 : %lf, 3 : %lf, 4 : %lf, 6 : %lf, 7 : %lf)", offset_position_1, offset_position_2, offset_position_3, offset_position_4, offset_position_6, offset_position_7);
 
     double direction_1, direction_2, direction_3, direction_4, direction_6, direction_7;
@@ -120,14 +120,14 @@ int CanCommunication::init(int hardware_version)
     ros::param::get("/niryo_one/motors/stepper_4_direction", direction_4);
     
     ros::param::get("/niryo_one/motors/stepper_6_direction", direction_6);
-    ros::param::get("/niryo_one/motors/stepper_6_direction", direction_7);
+    ros::param::get("/niryo_one/motors/stepper_7_direction", direction_7);
     int max_effort_1, max_effort_2, max_effort_3, max_effort_4, max_effort_6, max_effort_7;
     ros::param::get("/niryo_one/motors/stepper_1_max_effort", max_effort_1);
     ros::param::get("/niryo_one/motors/stepper_2_max_effort", max_effort_2);
     ros::param::get("/niryo_one/motors/stepper_3_max_effort", max_effort_3);
     ros::param::get("/niryo_one/motors/stepper_4_max_effort", max_effort_4);
     ros::param::get("/niryo_one/motors/stepper_6_max_effort", max_effort_6);
-    ros::param::get("/niryo_one/motors/stepper_6_max_effort", max_effort_7);
+    ros::param::get("/niryo_one/motors/stepper_7_max_effort", max_effort_7);
     // Create motors with previous params
     m1 = StepperMotorState("Stepper Axis 1", CAN_MOTOR_1_ID, gear_ratio_1, direction_1, 
             rad_pos_to_steps(home_position_1, gear_ratio_1, direction_1),            // home position
@@ -319,10 +319,10 @@ void CanCommunication::hardwareControlRead()
         if((motor_id == CAN_MOTOR_CONVEYOR_2_ID) &(is_conveyor_id_2_connected))
         { 
             can->sendConveyoOnCommand(CAN_MOTOR_CONVEYOR_2_ID, is_conveyor_id_2_on, conveyor_id_2_speed, conveyor_id_2_direction); 
-            int control_byte_1 = rxBuf[0];
+            int control_byte_2 = rxBuf[0];
             // treat data  
-            if (control_byte_1 == CAN_DATA_CONVEYOR_STATE) {
-                int conveyor_state = rxBuf[1];
+            if (control_byte_2 == CAN_DATA_CONVEYOR_STATE) {
+                int conveyor_state_2 = rxBuf[1];
                 // to do : send this value on a topic to track conveyor state 
             }	
          return; 
