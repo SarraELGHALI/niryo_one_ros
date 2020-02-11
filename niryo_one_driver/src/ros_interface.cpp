@@ -147,6 +147,11 @@ bool RosInterface::callbackControlConveyor(niryo_one_msgs::ControlConveyor::Requ
     res.state = comm->moveConveyor(req.id, req.control_on, req.speed, req.direction); 
     return true;
 }
+bool  RosInterface::callbackUpdateIdConveyor(niryo_one_msgs::UpdateConveyorId::Request &req, niryo_one_msgs::UpdateConveyorId::Response &res){
+    res.state = comm->updateIdConveyor(req.old_id, req.new_id, req.update); 
+    return true;
+}
+
 
 bool RosInterface::callbackOpenGripper(niryo_one_msgs::OpenGripper::Request &req, niryo_one_msgs::OpenGripper::Response &res)
 {
@@ -229,7 +234,8 @@ void RosInterface::startServiceServers()
     // steppers service test 
     ping_and_set_stepper_server = nh_.advertiseService("niryo_one/tools/ping_and_set_stepper", &RosInterface::callbackPingAndSetStepper, this);
     control_conveyor_server = nh_.advertiseService("niryo_one/tools/control_conveyor", &RosInterface::callbackControlConveyor, this);
-
+    update_conveyor_id_server = nh_.advertiseService("niryo_one/tools/update_conveyor_id", &RosInterface::callbackUpdateIdConveyor, this);
+    
     open_gripper_server = nh_.advertiseService("niryo_one/tools/open_gripper", &RosInterface::callbackOpenGripper, this);
     close_gripper_server = nh_.advertiseService("niryo_one/tools/close_gripper", &RosInterface::callbackCloseGripper, this);
     pull_air_vacuum_pump_server = nh_.advertiseService("niryo_one/tools/pull_air_vacuum_pump", &RosInterface::callbackPullAirVacuumPump, this);

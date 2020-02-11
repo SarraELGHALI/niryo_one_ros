@@ -45,6 +45,7 @@
 #define STEPPER_CONTROL_MODE_STANDARD 1
 #define STEPPER_CONVEYOR_OFF 20
 #define STEPPER_CONVEYOR_ON 21
+#define CAN_UPDATE_CONVEYOR_ID 23
 #define STEPPER_CONTROL_MODE_PID_POS  2 
 #define STEPPER_CONTROL_MODE_TORQUE   3
 
@@ -70,12 +71,14 @@ class NiryoCanDriver
         INT8U sendPositionCommand(int id, int cmd);
         INT8U sendRelativeMoveCommand(int id, int steps, int delay);
         INT8U sendTorqueOnCommand(int id, int torque_on);
-        INT8U sendConveyoOnCommand(int id, bool conveyor_on, int conveyor_speed, int8_t direction) ; 
         INT8U sendPositionOffsetCommand(int id, int cmd, int absolute_steps_at_offset_position);
         INT8U sendCalibrationCommand(int i, int offset, int delay, int direction, int timeout);
         INT8U sendSynchronizePositionCommand(int id, bool begin_traj);
         INT8U sendMicroStepsCommand(int id, int micro_steps);
         INT8U sendMaxEffortCommand(int id, int effort);
+        // Conveyor functions 
+        INT8U sendConveyoOnCommand(int id, bool conveyor_on, int conveyor_speed, int8_t direction) ; 
+        INT8U sendUpdateConveyorId(int old_id, int new_id);
       
 };
 

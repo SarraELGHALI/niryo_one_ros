@@ -71,6 +71,7 @@ class NiryoOneCommunication : public CommunicationBase {
 	// steppers niryo one conveyor belt test here 
 	int pingAndSetStepper(uint8_t id, bool activate);
 	int moveConveyor(uint8_t id, bool activate, int16_t speed, int8_t direction); 
+        int updateIdConveyor(uint8_t old_id, uint8_t new_id, bool update); 
         
         int openGripper(uint8_t id, uint16_t open_position, uint16_t open_speed, uint16_t open_hold_torque);
         int closeGripper(uint8_t id, uint16_t close_position, uint16_t close_speed, uint16_t close_hold_torque, uint16_t close_max_torque);

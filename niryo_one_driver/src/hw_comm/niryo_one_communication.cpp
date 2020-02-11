@@ -211,8 +211,13 @@ int NiryoOneCommunication::moveConveyor(uint8_t id, bool activate, int16_t speed
     }
     return TOOL_STATE_PING_OK;
 }
-
-
+int NiryoOneCommunication::updateIdConveyor(uint8_t old_id, uint8_t new_id, bool update)
+{ 
+    if (can_enabled) {
+        return canComm->updateConveyorId(old_id, new_id, update);
+    }
+    return TOOL_STATE_PING_OK;
+}
 
 
 void NiryoOneCommunication::checkHardwareVersionFromDxlMotors()

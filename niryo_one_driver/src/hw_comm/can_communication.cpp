@@ -51,6 +51,7 @@ int CanCommunication::init(int hardware_version)
     conveyor_id_2_speed = 60;
     conveyor_id_1_direction = 1;  
     conveyor_id_2_direction = 1; 
+    update_id = false; 
     ros::param::get("~spi_channel", spi_channel);
     ros::param::get("~spi_baudrate", spi_baudrate);
     ros::param::get("~gpio_can_interrupt", gpio_can_interrupt);
@@ -306,7 +307,11 @@ void CanCommunication::hardwareControlRead()
         int motor_id = rxId & 0x0F; // 0x11 for id 1, 0x12 for id 2, ...
         // conveyor belt detecetd
         if((motor_id == CAN_MOTOR_CONVEYOR_1_ID) &(is_conveyor_id_1_connected))
-        { 
+        {  
+            if((update_id)&(old_id == motor_id)){
+                can->sendUpdateConveyorId(CAN_MOTOR_CONVEYOR_1_ID, new_id); 
+                return; 
+            }
             can->sendConveyoOnCommand(CAN_MOTOR_CONVEYOR_1_ID, is_conveyor_id_1_on, conveyor_id_1_speed, conveyor_id_1_direction); 
             int control_byte_1 = rxBuf[0];
             // treat data  
@@ -318,13 +323,17 @@ void CanCommunication::hardwareControlRead()
         }
         if((motor_id == CAN_MOTOR_CONVEYOR_2_ID) &(is_conveyor_id_2_connected))
         { 
+            if((update_id)&(old_id == motor_id)){
+                can->sendUpdateConveyorId(old_id, new_id); 
+                return; 
+            }
             can->sendConveyoOnCommand(CAN_MOTOR_CONVEYOR_2_ID, is_conveyor_id_2_on, conveyor_id_2_speed, conveyor_id_2_direction); 
             int control_byte_2 = rxBuf[0];
             // treat data  
             if (control_byte_2 == CAN_DATA_CONVEYOR_STATE) {
                 int conveyor_state_2 = rxBuf[1];
                 // to do : send this value on a topic to track conveyor state 
-            }	
+            }
          return; 
         }
           // treat niryo one steppers 
@@ -1302,4 +1311,11 @@ int CanCommunication::conveyorOn(uint8_t id, bool control_on, int16_t speed, int
     return(1);
 }
 
+int  CanCommunication::updateConveyorId(uint8_t id, uint8_t new_id, bool update)
+{   
+    update_id = update; 
+    new_id = new_id; 
+    old_id = id; 
+    return(1); 
+}
 

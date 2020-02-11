@@ -42,7 +42,8 @@
 #include "niryo_one_msgs/ChangeHardwareVersion.h"
 #include "niryo_one_msgs/SendCustomDxlValue.h"
 #include "niryo_one_msgs/SetConveyor.h"
-#include "niryo_one_msgs/ControlConveyor.h"  
+#include "niryo_one_msgs/ControlConveyor.h"
+#include "niryo_one_msgs/UpdateConveyorId.h"  
 
 #include "niryo_one_msgs/HardwareStatus.h"
 #include "niryo_one_msgs/SoftwareVersion.h"
@@ -113,6 +114,7 @@ class RosInterface {
 	// Conveyor services 
 	ros::ServiceServer ping_and_set_stepper_server; 
 	ros::ServiceServer control_conveyor_server;
+        ros::ServiceServer update_conveyor_id_server;
 
         // callbacks
         
@@ -126,6 +128,7 @@ class RosInterface {
 
         bool callbackPingAndSetStepper(niryo_one_msgs::SetConveyor::Request &req, niryo_one_msgs::SetConveyor::Response &res); 
         bool callbackControlConveyor(niryo_one_msgs::ControlConveyor::Request &req, niryo_one_msgs::ControlConveyor::Response &res); 
+        bool callbackUpdateIdConveyor(niryo_one_msgs::UpdateConveyorId::Request &req, niryo_one_msgs::UpdateConveyorId::Response &res); 
 
         bool callbackOpenGripper(niryo_one_msgs::OpenGripper::Request &req, niryo_one_msgs::OpenGripper::Response &res);
         bool callbackCloseGripper(niryo_one_msgs::CloseGripper::Request &req, niryo_one_msgs::CloseGripper::Response &res);

@@ -81,6 +81,7 @@ class FakeCommunication : public CommunicationBase {
         // conveyor belt 
         int pingAndSetStepper(uint8_t id, bool activate); 
 	int moveConveyor(uint8_t id, bool activate, int16_t speed, int8_t direction); 
+        int updateIdConveyor(uint8_t old_id, uint8_t new_id, bool update); 
     private:
 
         int hardware_version;

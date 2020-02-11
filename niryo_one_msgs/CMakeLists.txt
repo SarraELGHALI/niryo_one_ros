@@ -59,6 +59,7 @@ add_service_files(
   SetString.srv
   SetConveyor.srv
   ControlConveyor.srv
+  UpdateConveyorId.srv
 )
 
 add_action_files(
