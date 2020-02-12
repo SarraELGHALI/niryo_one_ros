@@ -198,6 +198,15 @@ int CanCommunication::init(int hardware_version)
         motors.push_back(&m4);
     }
 
+
+    allowed_motors.push_back(&m1);
+    allowed_motors.push_back(&m2);
+    allowed_motors.push_back(&m3);
+    if (hardware_version == 1) {
+        allowed_motors.push_back(&m4);
+    }
+    allowed_motors.push_back(&m6);
+    allowed_motors.push_back(&m7);
     // set hw control init state
     torque_on = 0;
 
@@ -344,9 +353,9 @@ void CanCommunication::hardwareControlRead()
         }
           // treat niryo one steppers 
 	bool motor_found = false;
-        for (int i = 0; i < motors.size(); i++) {
-            if (motor_id == motors.at(i)->getId()) {
-                motors.at(i)->setLastTimeRead(ros::Time::now().toSec());
+        for (int i = 0; i < allowed_motors.size(); i++) {
+            if (motor_id == allowed_motors.at(i)->getId()){
+                allowed_motors.at(i)->setLastTimeRead(ros::Time::now().toSec());
                 motor_found = true;
                 break;
             }
@@ -1250,14 +1259,14 @@ int CanCommunication::scanAndCheck()
             else if (hardware_version == 1 && motor_id == m4.getId()) { // m4 only for Niryo One V1
                 m4_ok = true;
             }
-            else { // detect unallowed motor
-                ROS_ERROR("Scan CAN bus : Received can frame with wrong id : %d", motor_id);
-                hw_is_busy = false;
-                debug_error_message = "Unallowed connected motor : ";
-                debug_error_message += std::to_string(motor_id);
-                ROS_ERROR("%s", debug_error_message.c_str());
-                return CAN_SCAN_NOT_ALLOWED;
-            }
+            // else { // detect unallowed motor
+            //     ROS_ERROR("Scan CAN bus : Received can frame with wrong id : %d", motor_id);
+            //     hw_is_busy = false;
+            //     debug_error_message = "Unallowed connected motor : ";
+            //     debug_error_message += std::to_string(motor_id);
+            //     ROS_ERROR("%s", debug_error_message.c_str());
+            //     return CAN_SCAN_NOT_ALLOWED;
+            // }
         }
 
         if (ros::Time::now().toSec() - time_begin_scan > timeout) {

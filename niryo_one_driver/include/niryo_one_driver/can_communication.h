@@ -179,6 +179,7 @@ class CanCommunication {
 
 
         std::vector<StepperMotorState*> motors;
+        std::vector<StepperMotorState*> allowed_motors;
 
         // enable flags (no read flag)
 
