@@ -1331,9 +1331,9 @@ int CanCommunication::conveyorOn(uint8_t id, bool control_on, int16_t speed, int
     return(1);
 }
 
-int  CanCommunication::updateConveyorId(uint8_t id, uint8_t new_id_up, bool update)
+int  CanCommunication::updateConveyorId(uint8_t id, uint8_t new_id_up)
 {  // TO DO : return 0  if wrong id, check if it is a worng id  ( new and old id)
-    update_id = update; 
+    update_id = true; 
     this->new_id = new_id_up; 
     old_id = id;
     return(1); 

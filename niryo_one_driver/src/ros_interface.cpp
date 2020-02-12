@@ -148,7 +148,7 @@ bool RosInterface::callbackControlConveyor(niryo_one_msgs::ControlConveyor::Requ
     return true;
 }
 bool  RosInterface::callbackUpdateIdConveyor(niryo_one_msgs::UpdateConveyorId::Request &req, niryo_one_msgs::UpdateConveyorId::Response &res){
-    res.state = comm->updateIdConveyor(req.old_id, req.new_id, req.update); 
+    res.state = comm->updateIdConveyor(req.old_id, req.new_id); 
     return true;
 }
 

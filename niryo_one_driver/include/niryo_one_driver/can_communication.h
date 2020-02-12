@@ -116,7 +116,7 @@ class CanCommunication {
         void synchronizeSteppers(bool begin_traj);
 	int setStepper(uint8_t id, bool activate);
 	int conveyorOn(uint8_t id, bool activate, int16_t speed, int8_t direction); 
-        int updateConveyorId(uint8_t id, uint8_t new_id_up, bool update); 
+        int updateConveyorId(uint8_t id, uint8_t new_id_up); 
     private:
         
         // Niryo One hardware version
