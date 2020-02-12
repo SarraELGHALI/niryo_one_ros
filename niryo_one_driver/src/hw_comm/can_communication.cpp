@@ -442,6 +442,12 @@ void CanCommunication::hardwareControlRead()
                 }
             }
         }
+	else if (control_byte == CAN_DATA_CONVEYOR_STATE) {
+                int conveyor_state_on = rxBuf[1];
+                // to do : send this value on a topic to track conveyor state 
+            
+         return; 
+	}
         else {
             ROS_ERROR("Received can frame with unknown control byte");
             return;
