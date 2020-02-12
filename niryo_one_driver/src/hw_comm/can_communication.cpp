@@ -435,9 +435,9 @@ void CanCommunication::hardwareControlRead()
             version += std::to_string(v_patch);
 
             // fill data
-            for (int i = 0; i < motors.size(); i++) {
-                if (motor_id == motors.at(i)->getId() && motors.at(i)->isEnabled()) {
-                    motors.at(i)->setFirmwareVersion(version);
+            for (int i = 0; i < allowed_motors.size(); i++) {
+                if (motor_id == allowed_motors.at(i)->getId() && allowed_motors.at(i)->isEnabled()) {
+                    allowed_motors.at(i)->setFirmwareVersion(version);
                     return;
                 }
             }
@@ -1297,11 +1297,27 @@ int CanCommunication::setStepper(uint8_t id, bool activate)
     
     if (id == CAN_MOTOR_CONVEYOR_1_ID) 
     { 
-        is_conveyor_id_1_connected = activate; 
+        is_conveyor_id_1_connected = activate;
+        if(activate)
+        {
+           m6.enable();  
+        }
+        else
+        {
+           m6.disable();  
+        }
     }
     else if (id == CAN_MOTOR_CONVEYOR_2_ID)
     {
          is_conveyor_id_2_connected = activate; 
+        if(activate)
+        {
+           m7.enable();  
+        }
+        else
+        {
+           m7.disable();  
+        }
     }
     else
     {
