@@ -308,9 +308,11 @@ void CanCommunication::hardwareControlRead()
         // conveyor belt detecetd
         if((motor_id == CAN_MOTOR_CONVEYOR_1_ID) &(is_conveyor_id_1_connected))
         {  
-            if((update_id)&(old_id == motor_id)){
+            if((update_id) & (old_id == motor_id)){
                 can->sendUpdateConveyorId(CAN_MOTOR_CONVEYOR_1_ID, new_id);
-		update_id = false; 
+		        update_id = false; 
+                is_conveyor_id_1_connected = false; 
+                is_conveyor_id_2_connected = true;
                 return; 
             }
             can->sendConveyoOnCommand(CAN_MOTOR_CONVEYOR_1_ID, is_conveyor_id_1_on, conveyor_id_1_speed, conveyor_id_1_direction); 
@@ -324,9 +326,11 @@ void CanCommunication::hardwareControlRead()
         }
         if((motor_id == CAN_MOTOR_CONVEYOR_2_ID) &(is_conveyor_id_2_connected))
         { 
-            if((update_id)&(old_id == motor_id)){
+            if((update_id) & (old_id == motor_id)){
                 can->sendUpdateConveyorId(old_id, new_id); 
-		update_id = false; 
+		        update_id = false; 
+                is_conveyor_id_2_connected = false; 
+                is_conveyor_id_1_connected = true; 
                 return; 
             }
             can->sendConveyoOnCommand(CAN_MOTOR_CONVEYOR_2_ID, is_conveyor_id_2_on, conveyor_id_2_speed, conveyor_id_2_direction); 
@@ -1215,7 +1219,6 @@ int CanCommunication::scanAndCheck()
             unsigned char rxBuf[8];
            
             can->readMsgBuf(&rxId, &len, rxBuf);
-             ROS_INFO("id from motor rxId = %ld", rxId); 
             // Validate id
             int motor_id = rxId & 0x00F; // 0x101 for id 1, 0x102 for id 2, ...
             if (motor_id == m1.getId()) {
@@ -1279,11 +1282,10 @@ int CanCommunication::scanAndCheck()
     return CAN_SCAN_OK;
 }
 
-
+// TO DO : return 0  if wrong id, check if it is a worng id  
 int CanCommunication::setStepper(uint8_t id, bool activate)
 {
-    // accept whatever id for now  with possiblity to connect only one conveyor 
-    // to do : user set motor id , phase step up : change motor id  with the new id
+    
     if (id == CAN_MOTOR_CONVEYOR_1_ID) 
     { 
         is_conveyor_id_1_connected = activate; 
@@ -1292,12 +1294,15 @@ int CanCommunication::setStepper(uint8_t id, bool activate)
     {
          is_conveyor_id_2_connected = activate; 
     }
+    else
+    {
+          ROS_ERROR(" Received wrong ID ");
+    }
     return(1);
 }
 int CanCommunication::conveyorOn(uint8_t id, bool control_on, int16_t speed, int8_t direction)
 {
-    // accept whatever id for now  with possiblity to connect only one conveyor 
-    // to do : user set motor id , phase step up : change motor id  with the new id
+    // TO DO : return 0  if wrong id, check if it is a worng id  
       if (id == CAN_MOTOR_CONVEYOR_1_ID) 
     {
         is_conveyor_id_1_on = control_on; 
@@ -1310,15 +1315,18 @@ int CanCommunication::conveyorOn(uint8_t id, bool control_on, int16_t speed, int
         conveyor_id_2_speed =speed; 
         conveyor_id_2_direction = direction;
     }
+    else
+    {
+          ROS_ERROR(" Received wrong ID ");
+    }
     return(1);
 }
 
 int  CanCommunication::updateConveyorId(uint8_t id, uint8_t new_id, bool update)
-{   
+{  // TO DO : return 0  if wrong id, check if it is a worng id  ( new and old id)
     update_id = update; 
-    new_id = new_id; 
+    this->new_id = new_id; 
     old_id = id;
-	ROS_ERROR("new id : %d", new_id);
     return(1); 
 }
 
