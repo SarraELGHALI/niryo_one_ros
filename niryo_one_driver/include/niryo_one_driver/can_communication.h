@@ -121,7 +121,6 @@ class CanCommunication {
         
         // Niryo One hardware version
         int hardware_version;
-        
         int spi_channel;
         int spi_baudrate;
         int gpio_can_interrupt;
